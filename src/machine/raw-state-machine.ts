@@ -1,18 +1,18 @@
-import {Node, RawNode} from "./node";
+import {Node, RawNode} from "./raw-node";
 import {Event} from "./event";
-import {State} from "./state";
+import {StateData} from "./state-data";
 
 export interface StateMachine<T> {
-    dispatch($event: Event): State<T>;
+    dispatch($event: Event): StateData<T>;
 }
 
-export class StateMachine<T> implements StateMachine<T> {
+export class RawStateMachine<T> implements StateMachine<T> {
 
     private _states: Map<string, Node<T>>;
-    private _initialState: State<T>;
-    private _currentState: State<T>;
+    private _initialState: StateData<T>;
+    private _currentState: StateData<T>;
 
-    constructor(initialState: State<T>) {
+    constructor(initialState: StateData<T>) {
         this._states = new Map<string, Node<T>>();
         this._initialState = initialState;
         this._currentState = initialState;
@@ -25,9 +25,9 @@ export class StateMachine<T> implements StateMachine<T> {
         return node;
     }
 
-    public dispatch(event: Event): State<T> | never {
+    public dispatch(event: Event): StateData<T> | never {
         if (!this._states.has(this._currentState.name))
-            throw new Error(`We arrived to unkown state ${this._currentState.name}`);
+            throw new Error(`Invalid initial state ${this._currentState.name}`);
 
         const currentState = this._states.get(this._currentState.name) as Node<T>;
         // @ts-ignore We have already checked there is such state
@@ -40,7 +40,7 @@ export class StateMachine<T> implements StateMachine<T> {
         return this._currentState;
     }
 
-    public get currentState(): State<T> {
+    public get currentState(): StateData<T> {
         return this._currentState;
     }
 }

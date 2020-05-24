@@ -1,9 +1,10 @@
-import {StateMachine} from "../machine/state-machine";
+import {RawStateMachine, StateMachine} from "../machine/raw-state-machine";
+import {TransitionAction} from "../machine/raw-transition";
 
 describe('awsm-fsm', () => {
 
     const createMachine = () => {
-        const machine = new StateMachine({ name: 'a', data: 'A' });
+        const machine = new RawStateMachine<string>({ name: 'a', data: 'A' });
         machine
             .addNode('a')
             .addTransition('a-to-b', 'b', () => 'B-FROM-A')
@@ -63,6 +64,21 @@ describe('awsm-fsm', () => {
         expect(currentState.name).toBe('a');
         expect(currentState.data).toBe('A');
         expect(machine.currentState).toBe(currentState);
+    });
+
+    it('should allow to create machine without transitions', () => {
+        const machine = new RawStateMachine({ name: 'a' });
+        machine
+            .addNode('a')
+            .addTransition('a-to-b', 'b');
+        machine
+            .addNode('b')
+            .addTransition('b-to-a', 'a');
+
+        let currentState = machine.dispatch({ name: 'a-to-b' });
+        expect(currentState.name).toBe('b');
+        currentState = machine.dispatch({ name: 'b-to-a' });
+        expect(currentState.name).toBe('a');
     })
 
 });
