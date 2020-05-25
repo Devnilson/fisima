@@ -1,5 +1,4 @@
-import { RawStateMachine, StateMachine } from '../machine/raw-state-machine';
-import { TransitionAction } from '../machine/raw-transition';
+import { RawStateMachine } from '../machine/raw-state-machine';
 
 describe('awsm-fsm', () => {
   const createMachine = () => {
