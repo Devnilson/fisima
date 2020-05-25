@@ -9,7 +9,7 @@ if [ "$BRANCH" = "" ]; then
 fi
 
 if [ "$BRANCH" = "master" ]; then
-  npm release
+  npm publish
 elif [ "$BRANCH" = "develop" ]; then
   npm publish --tag develop
 fi
