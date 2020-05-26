@@ -1,7 +1,8 @@
-import { RawStateMachine, StateMachine } from '../raw-state-machine';
 import { NodeBuilder } from './node.builder';
+import { RawStateMachine } from '../raw';
+import { StateMachine } from '../model';
 
-export class StateMachineBuilder<T> {
+export class RawStateMachineBuilder<T> {
   private readonly initialStateName: string;
   private readonly initialStateData: T | undefined;
   private readonly nodeBuilders: NodeBuilder<T>[];

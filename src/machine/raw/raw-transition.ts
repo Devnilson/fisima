@@ -1,12 +1,5 @@
-import { StateData } from './state-data';
+import { StateData, Transition, TransitionAction } from '../model';
 
-export interface Transition<T> {
-  getTransitionName(): string;
-  getDestinationState(): string;
-  trigger(currentState: StateData<T>, $event: any): StateData<T>;
-}
-
-export type TransitionAction<T> = (current: T | undefined | null) => T | undefined | null;
 
 export const noopTransitionTrigger = <T>(a: T | null | undefined) => a;
 
