@@ -1,4 +1,6 @@
 import { StateMachineBuilder } from '..';
+import { subscribeOn, take } from 'rxjs/operators';
+import { asapScheduler } from 'rxjs';
 
 describe('awsm-fsm', () => {
   const createMachine = () =>
@@ -16,45 +18,59 @@ describe('awsm-fsm', () => {
       .and()
       .build();
 
-  it('should run', () => {
+  it('should run', (done) => {
     const machine = createMachine();
 
     machine.dispatch({ type: 'a-to-b' });
-    expect(machine.getCurrentState().name).toBe('b');
-    expect(machine.getCurrentState().data).toBe('B-FROM-A');
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('b');
+      expect(currentState.data).toBe('B-FROM-A');
+      done();
+    });
   });
 
   it('should transition through states', () => {
     const machine = createMachine();
 
     machine.dispatch({ type: 'a-to-b' });
-    expect(machine.getCurrentState().name).toBe('b');
-    expect(machine.getCurrentState().data).toBe('B-FROM-A');
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('b');
+      expect(currentState.data).toBe('B-FROM-A');
+    });
 
     machine.dispatch({ type: 'b-to-a' });
-    expect(machine.getCurrentState().name).toBe('a');
-    expect(machine.getCurrentState().data).toBe('A-FROM-B');
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('a');
+      expect(currentState.data).toBe('A-FROM-B');
+    });
 
     machine.dispatch({ type: 'a-to-c' });
-    expect(machine.getCurrentState().name).toBe('c');
-    expect(machine.getCurrentState().data).toBe('C-FROM-A');
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('c');
+      expect(currentState.data).toBe('C-FROM-A');
+    });
   });
 
-  it('should not transition when events are fired and no transition from it', () => {
+  it('should not transition when events are fired and no transition from it', (done) => {
     const machine = createMachine();
 
     machine.dispatch({ type: 'b-to-a' });
-    expect(machine.getCurrentState().name).toBe('a');
-    expect(machine.getCurrentState().data).toBe('A');
-    machine.getCurrentState()
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('a');
+      expect(currentState.data).toBe('A');
+      done();
+    });
   });
 
-  it('should not transition for non existing events', () => {
+  it('should not transition for non existing events', (done) => {
     const machine = createMachine();
 
     machine.dispatch({ type: 'invent' });
-    expect(machine.getCurrentState().name).toBe('a');
-    expect(machine.getCurrentState().data).toBe('A');
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('a');
+      expect(currentState.data).toBe('A');
+      done();
+    });
   });
 
   it('should allow to create machine without transitions', () => {
@@ -64,8 +80,12 @@ describe('awsm-fsm', () => {
       .and().build();
 
     machine.dispatch({ type: 'a-to-b' });
-    expect(machine.getCurrentState().name).toBe('b');
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('b');
+    });
     machine.dispatch({ type: 'b-to-a' });
-    expect(machine.getCurrentState().name).toBe('a');
+    machine.getCurrentState().pipe(take(1), subscribeOn(asapScheduler)).subscribe(currentState => {
+      expect(currentState.name).toBe('a');
+    });
   });
 });
