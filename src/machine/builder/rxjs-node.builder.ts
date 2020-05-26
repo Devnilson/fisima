@@ -5,21 +5,21 @@ import { NodeBuilder } from './node.builder';
 
 export class RxjsNodeBuilder<T> {
   private readonly parentBuilder: RxjsStateMachineBuilder<T>;
-  private readonly nodeBuidler: NodeBuilder<T>;
+  private readonly nodeBuilder: NodeBuilder<T>;
 
   constructor(
     parentBuilder: RxjsStateMachineBuilder<T>,
     nodeBuilder: NodeBuilder<T>,
     ) {
     this.parentBuilder = parentBuilder;
-    this.nodeBuidler = nodeBuilder;
+    this.nodeBuilder = nodeBuilder;
   }
 
-  public withTransition(
-    transitionName: string,
+  public withStaticTransition(
+    eventType: string,
     destination: string,
     onTransitionTrigger: TransitionAction<T> = noopTransitionTrigger): RxjsNodeBuilder<T> {
-    this.nodeBuidler.withTransition(transitionName, destination, onTransitionTrigger);
+    this.nodeBuilder.withStaticTransition(eventType, destination, onTransitionTrigger);
     return this;
   }
 
@@ -28,6 +28,6 @@ export class RxjsNodeBuilder<T> {
   }
 
   public build(): Node<T> {
-    return this.nodeBuidler.build();
+    return this.nodeBuilder.build();
   }
 }

@@ -1,4 +1,3 @@
-import { NodeBuilder } from './node.builder';
 import { RawStateMachineBuilder } from './raw-state-machine.builder';
 import { RxjsStateMachine, RxjsStateMachineDecorator } from '../rxjs';
 import { RxjsNodeBuilder } from './rxjs-node.builder';
