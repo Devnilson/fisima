@@ -1,74 +1,71 @@
-import { RawStateMachine } from '../machine/raw-state-machine';
+import { StateMachineBuilder } from '..';
 
 describe('awsm-fsm', () => {
-  const createMachine = () => {
-    const machine = new RawStateMachine<string>({ name: 'a', data: 'A' });
-    machine
-      .addNode('a')
-      .addTransition('a-to-b', 'b', () => 'B-FROM-A')
-      .addTransition('a-to-c', 'c', () => 'C-FROM-A');
-    machine
-      .addNode('b')
-      .addTransition('b-to-c', 'c', () => 'C-FROM-B')
-      .addTransition('b-to-a', 'a', () => 'A-FROM-B');
-    machine.addNode('c').addTransition('c-to-b', 'b', () => 'B-FROM-C');
-    return machine;
-  };
+  const createMachine = () =>
+     new StateMachineBuilder<string>('a', 'A')
+      .withNode('a')
+      .withTransition('a-to-b', 'b', () => 'B-FROM-A')
+      .withTransition('a-to-c', 'c', () => 'C-FROM-A')
+      .and()
+      .withNode('b')
+      .withTransition('b-to-c', 'c', () => 'C-FROM-B')
+      .withTransition('b-to-a', 'a', () => 'A-FROM-B')
+      .and()
+      .withNode('c')
+      .withTransition('c-to-b', 'b', () => 'B-FROM-C')
+      .and()
+      .build();
 
   it('should run', () => {
     const machine = createMachine();
 
-    const currentState = machine.dispatch({ name: 'a-to-b' });
-    expect(currentState.name).toBe('b');
-    expect(currentState.data).toBe('B-FROM-A');
-    expect(machine.currentState).toBe(currentState);
+    machine.dispatch({ type: 'a-to-b' });
+    expect(machine.getCurrentState().name).toBe('b');
+    expect(machine.getCurrentState().data).toBe('B-FROM-A');
   });
 
   it('should transition through states', () => {
     const machine = createMachine();
 
-    let currentState = machine.dispatch({ name: 'a-to-b' });
-    expect(currentState.name).toBe('b');
-    expect(currentState.data).toBe('B-FROM-A');
-    expect(machine.currentState).toBe(currentState);
+    machine.dispatch({ type: 'a-to-b' });
+    expect(machine.getCurrentState().name).toBe('b');
+    expect(machine.getCurrentState().data).toBe('B-FROM-A');
 
-    currentState = machine.dispatch({ name: 'b-to-a' });
-    expect(currentState.name).toBe('a');
-    expect(currentState.data).toBe('A-FROM-B');
-    expect(machine.currentState).toBe(currentState);
+    machine.dispatch({ type: 'b-to-a' });
+    expect(machine.getCurrentState().name).toBe('a');
+    expect(machine.getCurrentState().data).toBe('A-FROM-B');
 
-    currentState = machine.dispatch({ name: 'a-to-c' });
-    expect(currentState.name).toBe('c');
-    expect(currentState.data).toBe('C-FROM-A');
-    expect(machine.currentState).toBe(currentState);
+    machine.dispatch({ type: 'a-to-c' });
+    expect(machine.getCurrentState().name).toBe('c');
+    expect(machine.getCurrentState().data).toBe('C-FROM-A');
   });
 
   it('should not transition when events are fired and no transition from it', () => {
     const machine = createMachine();
 
-    let currentState = machine.dispatch({ name: 'b-to-a' });
-    expect(currentState.name).toBe('a');
-    expect(currentState.data).toBe('A');
-    expect(machine.currentState).toBe(currentState);
+    machine.dispatch({ type: 'b-to-a' });
+    expect(machine.getCurrentState().name).toBe('a');
+    expect(machine.getCurrentState().data).toBe('A');
+    machine.getCurrentState()
   });
 
   it('should not transition for non existing events', () => {
     const machine = createMachine();
 
-    let currentState = machine.dispatch({ name: 'invent' });
-    expect(currentState.name).toBe('a');
-    expect(currentState.data).toBe('A');
-    expect(machine.currentState).toBe(currentState);
+    machine.dispatch({ type: 'invent' });
+    expect(machine.getCurrentState().name).toBe('a');
+    expect(machine.getCurrentState().data).toBe('A');
   });
 
   it('should allow to create machine without transitions', () => {
-    const machine = new RawStateMachine({ name: 'a' });
-    machine.addNode('a').addTransition('a-to-b', 'b');
-    machine.addNode('b').addTransition('b-to-a', 'a');
+    const machine = new StateMachineBuilder<string>('a')
+      .withNode('a').withTransition('a-to-b', 'b')
+      .and().withNode('b').withTransition('b-to-a', 'a')
+      .and().build();
 
-    let currentState = machine.dispatch({ name: 'a-to-b' });
-    expect(currentState.name).toBe('b');
-    currentState = machine.dispatch({ name: 'b-to-a' });
-    expect(currentState.name).toBe('a');
+    machine.dispatch({ type: 'a-to-b' });
+    expect(machine.getCurrentState().name).toBe('b');
+    machine.dispatch({ type: 'b-to-a' });
+    expect(machine.getCurrentState().name).toBe('a');
   });
 });
