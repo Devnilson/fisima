@@ -1,14 +1,14 @@
-import { noopTransitionTrigger, RawMachineTransition, Transition, TransitionAction } from '../raw-transition';
-import { Node, RawNode } from '../raw-node';
-import { StateMachineBuilder } from './state-machine.builder';
+import { RawStateMachineBuilder } from './raw-state-machine.builder';
+import { Node, Transition, TransitionAction } from '../model';
+import { noopTransitionTrigger, RawMachineTransition, RawNode } from '../raw';
 
 export class NodeBuilder<T> {
-  private readonly parentBuilder: StateMachineBuilder<T>;
+  private readonly parentBuilder: RawStateMachineBuilder<T>;
   private readonly nodeName: string;
   private readonly transitions: Transition<T>[];
 
   constructor(
-    parentBuilder: StateMachineBuilder<T>,
+    parentBuilder: RawStateMachineBuilder<T>,
     name: string) {
     this.parentBuilder = parentBuilder;
     this.nodeName = name;
@@ -23,7 +23,7 @@ export class NodeBuilder<T> {
     return this;
   }
 
-  public and(): StateMachineBuilder<T> {
+  public and(): RawStateMachineBuilder<T> {
     return this.parentBuilder;
   }
 

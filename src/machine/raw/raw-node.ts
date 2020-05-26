@@ -1,11 +1,4 @@
-import { StateData } from './state-data';
-import { Event } from './event';
-import { Transition } from './raw-transition';
-
-export interface Node<T> {
-  getName(): string;
-  dispatch($event: Event, currentState: StateData<T>): StateData<T>;
-}
+import { Node, StateData, Transition } from '../model';
 
 export class RawNode<T> implements Node<T> {
   private readonly name: string;

@@ -1,10 +1,10 @@
-import { StateMachineBuilder } from '..';
 import { subscribeOn, take } from 'rxjs/operators';
 import { asapScheduler } from 'rxjs';
+import { RxjsStateMachineBuilder } from '../machine/builder/rxjs-state-machine.builder';
 
-describe('awsm-fsm', () => {
+describe('rxjs-state-machine', () => {
   const createMachine = () =>
-     new StateMachineBuilder<string>('a', 'A')
+     new RxjsStateMachineBuilder<string>('a', 'A')
       .withNode('a')
       .withTransition('a-to-b', 'b', () => 'B-FROM-A')
       .withTransition('a-to-c', 'c', () => 'C-FROM-A')
@@ -74,7 +74,7 @@ describe('awsm-fsm', () => {
   });
 
   it('should allow to create machine without transitions', () => {
-    const machine = new StateMachineBuilder<string>('a')
+    const machine = new RxjsStateMachineBuilder<string>('a')
       .withNode('a').withTransition('a-to-b', 'b')
       .and().withNode('b').withTransition('b-to-a', 'a')
       .and().build();
