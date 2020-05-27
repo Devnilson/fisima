@@ -6,32 +6,30 @@ This is a simple finite state machine built on Typescript
 
 ## Roadmap
 
- * Make state domain objects inmutable
-* Create builders to construct a state machine easier
 * Be able to start from an existing machine definition to extend it, creating a new state graph
 * Machine state verification (All states are reachable, all transitions have origin/destination a valid state, etc)
-* Add rxjs and create observables for state changes and transition triggering 
+* Hooks: On enter node, on exit node, on transition triggered, state change
+* Attach rxjs to hooks
 
 ## Usage
 
-Simply basic usage (v0.0.1)
+Simply basic usage (v0.0.3)
 ```javascript
 
- const createMachine = () => {
-    const machine = new RawStateMachine<string>({ name: 'a', data: 'A' });
-    machine
-      .addNode('a')
-      .addTransition('a-to-b', 'b', () => 'B-FROM-A')
-      .addTransition('a-to-c', 'c', () => 'C-FROM-A');
-    machine
-      .addNode('b')
-      .addTransition('b-to-c', 'c', () => 'C-FROM-B')
-      .addTransition('b-to-a', 'a', () => 'A-FROM-B');
-    machine
-      .addNode('c')
-      .addTransition('c-to-b', 'b', () => 'B-FROM-C');
-    return machine;
-};
+ const createMachine = () =>
+      new RawStateMachineBuilder<string>('a', 'A')
+       .withNode('a')
+       .withStaticTransition('a-to-b', 'b', () => 'B-FROM-A')
+       .withStaticTransition('a-to-c', 'c', () => 'C-FROM-A')
+       .and()
+       .withNode('b')
+       .withStaticTransition('b-to-c', 'c', () => 'C-FROM-B')
+       .withStaticTransition('b-to-a', 'a', () => 'A-FROM-B')
+       .and()
+       .withNode('c')
+       .withStaticTransition('c-to-b', 'b', () => 'B-FROM-C')
+       .and()
+       .build();
 
 const machine = createMachine();
 machine.dispatch({ name: 'a-to-b' });

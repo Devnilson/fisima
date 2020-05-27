@@ -6,15 +6,15 @@ describe('rxjs-state-machine', () => {
   const createMachine = () =>
      new RxjsStateMachineBuilder<string>('a', 'A')
       .withNode('a')
-      .withTransition('a-to-b', 'b', () => 'B-FROM-A')
-      .withTransition('a-to-c', 'c', () => 'C-FROM-A')
+      .withStaticTransition('a-to-b', 'b', () => 'B-FROM-A')
+      .withStaticTransition('a-to-c', 'c', () => 'C-FROM-A')
       .and()
       .withNode('b')
-      .withTransition('b-to-c', 'c', () => 'C-FROM-B')
-      .withTransition('b-to-a', 'a', () => 'A-FROM-B')
+      .withStaticTransition('b-to-c', 'c', () => 'C-FROM-B')
+      .withStaticTransition('b-to-a', 'a', () => 'A-FROM-B')
       .and()
       .withNode('c')
-      .withTransition('c-to-b', 'b', () => 'B-FROM-C')
+      .withStaticTransition('c-to-b', 'b', () => 'B-FROM-C')
       .and()
       .build();
 
@@ -75,8 +75,8 @@ describe('rxjs-state-machine', () => {
 
   it('should allow to create machine without transitions', () => {
     const machine = new RxjsStateMachineBuilder<string>('a')
-      .withNode('a').withTransition('a-to-b', 'b')
-      .and().withNode('b').withTransition('b-to-a', 'a')
+      .withNode('a').withStaticTransition('a-to-b', 'b')
+      .and().withNode('b').withStaticTransition('b-to-a', 'a')
       .and().build();
 
     machine.dispatch({ type: 'a-to-b' });

@@ -1,6 +1,6 @@
 import { RawStateMachineBuilder } from './raw-state-machine.builder';
 import { Node, Transition, TransitionAction } from '../model';
-import { noopTransitionTrigger, RawMachineTransition, RawNode } from '../raw';
+import { noopTransitionTrigger, StaticDestinationTransition, RawNode } from '../raw';
 
 export class NodeBuilder<T> {
   private readonly parentBuilder: RawStateMachineBuilder<T>;
@@ -15,11 +15,11 @@ export class NodeBuilder<T> {
     this.transitions = [];
   }
 
-  public withTransition(
-    transitionName: string,
-    destination: string,
+  public withStaticTransition(
+    eventType: string,
+    destinationNode: string,
     onTransitionTrigger: TransitionAction<T> = noopTransitionTrigger): NodeBuilder<T> {
-    this.transitions.push(new RawMachineTransition(transitionName, destination, onTransitionTrigger));
+    this.transitions.push(new StaticDestinationTransition(eventType, destinationNode, onTransitionTrigger));
     return this;
   }
 
