@@ -2,5 +2,4 @@ src
 tsconfig.json
 tslint.json
 .prettierrc
-.travis.yml
 ci/

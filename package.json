@@ -1,7 +1,7 @@
 {
-  "name": "awsm-fsm",
-  "version": "0.0.3",
-  "description": "Awesome FInite State Machine",
+  "name": "fisima",
+  "version": "0.0.1",
+  "description": "Finite State Machine",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/juancarrey/awsm-fsm.git"
+    "url": "git+https://github.com/Devnilson/fisima.git"
   },
   "keywords": [
     "FSM",
@@ -23,12 +23,12 @@
     "State",
     "Machine"
   ],
-  "author": "Juan Carrey",
+  "author": "Devnilson",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/juancarrey/awsm-fsm/issues"
+    "url": "https://github.com/Devnilson/fisima/issues"
   },
-  "homepage": "https://github.com/juancarrey/awsm-fsm#readme",
+  "homepage": "https://github.com/Devnilson/fisima#readme",
   "devDependencies": {
     "@types/jest": "^25.2.3",
     "jest": "^26.0.1",
@@ -39,6 +39,5 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "rxjs": "^6.5.5"
   }
 }
