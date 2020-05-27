@@ -1,5 +1,5 @@
 {
-  "name": "fisima",
+  "name": "@devnilson/fisima",
   "version": "0.0.1",
   "description": "Finite State Machine",
   "main": "lib/index.js",
