@@ -31,13 +31,19 @@
   "homepage": "https://github.com/Devnilson/fisima#readme",
   "devDependencies": {
     "@types/jest": "^25.2.3",
+    "husky": "^4.2.5",
     "jest": "^26.0.1",
-    "prettier": "^2.0.5",
+    "prettier": "2.0.5",
+    "pretty-quick": "^2.0.1",
     "ts-jest": "^26.0.0",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.9.3"
   },
-  "dependencies": {
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
