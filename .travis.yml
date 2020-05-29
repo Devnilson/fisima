@@ -3,18 +3,23 @@ language: node_js
 node_js:
   - 12
 
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
 deploy:
   provider: npm
-  email: "juankarrey@gmail.com"
+  email: 'devnilson@gmail.com'
   api_key: $NPM_AUTH_TOKEN
 
 before_script:
-  - npm install
+  - yarn install
 
 script:
-  - npm run build
-  - npm run lint
-  - npm test
+  - yarn build
+  - yarn lint
+  - yarn test
 
 after_success:
   - export TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH

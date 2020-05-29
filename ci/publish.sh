@@ -9,7 +9,7 @@ if [ "$BRANCH" = "" ]; then
 fi
 
 if [ "$BRANCH" = "master" ]; then
-  npm publish
+  npm publish --access public
 elif [ "$BRANCH" = "develop" ]; then
-  npm publish --tag develop
+  npm publish --access public --tag develop
 fi
