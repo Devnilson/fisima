@@ -1,0 +1,27 @@
+language: node_js
+
+node_js:
+  - 12
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+deploy:
+  provider: npm
+  email: 'devnilson@gmail.com'
+  api_key: $NPM_AUTH_TOKEN
+
+before_script:
+  - yarn install
+
+script:
+  - yarn build
+  - yarn lint
+  - yarn test
+
+after_success:
+  - export TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
+  - export TRAVIS_BRANCH=$TRAVIS_BRANCH
+  - ./ci/publish.sh
