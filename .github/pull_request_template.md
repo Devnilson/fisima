@@ -11,21 +11,21 @@ Closes #numIssue #prNumber
 What kind of change does this PR introduce?
 
 ```
-[ ] Bugfix
-[ ] Feature
-[ ] Code style update (formatting, local variables)
-[ ] Refactoring (no functional changes, no api changes)
-[ ] Build related changes
-[ ] CI related changes
-[ ] Documentation content changes
-[ ] Other... Please describe:
+- [] Bugfix
+- [] Feature
+- [] Code style update (formatting, local variables)
+- [] Refactoring (no functional changes, no api changes)
+- [] Build related changes
+- [] CI related changes
+- [] Documentation content changes
+- [] Other... Please describe:
 ```
 
 ## Does this PR introduce a breaking change?
 
 ```
-[ ] Yes
-[ ] No
+- [] Yes
+- [x] No
 ```
 
 ## What is the new behavior?
