@@ -2,7 +2,7 @@ import { MachineEvent, MachineTransitionFn, MachineState, MachineNode } from '..
 
 export type DeterministicTransitions = Map<MachineNode, Map<MachineEvent, MachineNode>>;
 
-export const deterministicTransitionFn: (transitions: DeterministicTransitions) => MachineTransitionFn<void> = (
+export const createDeterministicTransitions: (transitions: DeterministicTransitions) => MachineTransitionFn<void> = (
   transitions: DeterministicTransitions,
 ) => (currentState: MachineState<void>, $event: MachineEvent): MachineState<void> => {
   if (!transitions.has(currentState.currentNode)) {

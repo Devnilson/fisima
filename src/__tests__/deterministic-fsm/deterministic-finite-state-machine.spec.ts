@@ -1,26 +1,26 @@
-import { deterministicStateMachine } from '../../lib';
+import { DeterministicStateMachine } from '../../lib';
+import { DeterministicTransitions } from '../../lib/deterministic-fsm/deterministic-transition.fn';
 
 describe('deterministic-state-machine with deterministic-transition-fn', () => {
-  var machine = deterministicStateMachine(
-    'A',
-    new Set(['A', 'B']),
-    new Map([
-      [
-        'A',
-        new Map([
-          ['1', 'B'],
-          ['0', 'A'],
-        ]),
-      ],
-      [
-        'B',
-        new Map([
-          ['1', 'A'],
-          ['0', 'B'],
-        ]),
-      ],
-    ]),
-  );
+  const initialState = 'A';
+  const finalStates = new Set(['A', 'B']);
+  const transitions: DeterministicTransitions = new Map([
+    [
+      'A',
+      new Map([
+        ['1', 'B'],
+        ['0', 'A'],
+      ]),
+    ],
+    [
+      'B',
+      new Map([
+        ['1', 'A'],
+        ['0', 'B'],
+      ]),
+    ],
+  ]);
+  const machine = new DeterministicStateMachine(initialState, finalStates, transitions);
 
   it('should move A->B->A', () => {
     machine.handle('1');
