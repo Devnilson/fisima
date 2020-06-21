@@ -55,7 +55,10 @@ We are using **semantic commits messages** like our standard commit format. You 
 
 #### Message Subject
 
-First line cannot be longer than 70 characters, second line is always blank and other lines should be wrapped at 80 characters.
+- First should be the number of issue associated to commit `#33`
+- First line cannot be longer than 70 characters
+- Second line is always blank
+- Other lines should be wrapped at 80 characters.
 
 ##### Type
 
