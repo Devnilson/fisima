@@ -4,29 +4,25 @@ Closes #numIssue #prNumber
 
 # Description
 
-...Write here your PR description with a complete context to reviwers
+...Write here your PR description with a complete context to reviewers
 
 ## PR Type
 
 What kind of change does this PR introduce?
 
-```
-- [] Bugfix
-- [] Feature
-- [] Code style update (formatting, local variables)
-- [] Refactoring (no functional changes, no api changes)
-- [] Build related changes
-- [] CI related changes
-- [] Documentation content changes
-- [] Other... Please describe:
-```
+- [ ] Bugfix
+- [ ] Feature
+- [ ] Code style update (formatting, local variables)
+- [ ] Refactoring (no functional changes, no api changes)
+- [ ] Build related changes
+- [ ] CI related changes
+- [ ] Documentation content changes
+- [ ] Other... Please describe:
 
 ## Does this PR introduce a breaking change?
 
-```
-- [] Yes
+- [ ] Yes
 - [x] No
-```
 
 ## What is the new behavior?
 

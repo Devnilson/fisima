@@ -12,24 +12,24 @@ Yet another finite state machine implemented in typescript
 
 Build awesome software using formal state machine definition to drive behavior
 
-## Why fisima'?'
+## Why Fisima?
 
 Modern, flexible, production ready software
 
-## How to use'?'
+## How to use?
 
 TODO
 
 ## Contribute
 
+Please read all about contribute in this project in a separate read [Contributing](https://github.com/Devnilson/fisima/blob/master/CONTRIBUTING.md) file.
+
 ## Authors
 
-- Javier Lopez @javierlopezdeancos
-- Juan Carrey @juancarrey
-- Santiago Regojo @sregojo
-
-## Credits
+- [javierlopezdeancos](https://github.com/javierlopezdeancos) - **Javier López**<[javierlopezdeancos@outlook.com](mailto:javierlopezdeancos@outlook.com)>
+- [juancarrey](https://github.com/juancarrey) - **Juan Carrey**
+- [sregojo](https://github.com/sregojo) - **Santiago Regojo**
 
 ## License
 
-TODO
+You could review the project [MIT](https://github.com/Devnilson/fisima/blob/master/LICENSE) license file.
