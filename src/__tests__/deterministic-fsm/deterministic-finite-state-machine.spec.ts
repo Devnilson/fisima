@@ -1,5 +1,5 @@
 import { DeterministicStateMachine } from '../../lib';
-import { DeterministicTransitions } from '../../lib/deterministic-fsm/deterministic-transition.fn';
+import { DeterministicTransitions } from '../../lib/deterministic-fsm/deterministic-transition-map';
 
 describe('deterministic-state-machine with deterministic-transition-fn', () => {
   const initialState = 'A';

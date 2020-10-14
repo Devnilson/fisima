@@ -1,20 +1,17 @@
 import { MachineEvent, MachineTransitionFn, MachineState, MachineNode } from '../state-machine-api';
-
-export type DeterministicTransitions = Map<MachineNode, Map<MachineEvent, MachineNode>>;
+import { DeterministicTransitions } from './deterministic-transition-map';
 
 export const createDeterministicTransitions: (transitions: DeterministicTransitions) => MachineTransitionFn<void> = (
   transitions: DeterministicTransitions,
-) => (currentState: MachineState<void>, $event: MachineEvent): MachineState<void> => {
+) => (currentState: MachineState<void>, $event: MachineEvent): MachineNode => {
   if (!transitions.has(currentState.currentNode)) {
-    return currentState;
+    return currentState.currentNode;
   }
 
   const node = transitions.get(currentState.currentNode)!;
   if (!node.has($event)) {
-    return currentState;
+    return currentState.currentNode;
   }
 
-  return {
-    currentNode: node.get($event)!,
-  };
+  return node.get($event)!;
 };

@@ -1,4 +1,11 @@
-import { StateMachine, MachineEvent, MachineState, MachineNode, MachineTransitionFn } from '../state-machine-api';
+import {
+  StateMachine,
+  MachineEvent,
+  MachineState,
+  MachineNode,
+  MachineTransitionFn,
+  MachineOutputFn,
+} from '../state-machine-api';
 
 export class GenericStateMachine<TOutput> implements StateMachine<TOutput> {
   private currentState: MachineState<TOutput>;
@@ -8,6 +15,7 @@ export class GenericStateMachine<TOutput> implements StateMachine<TOutput> {
     private initialNode: MachineNode,
     private finalNodes: Set<MachineNode>,
     private transitionFn: MachineTransitionFn<TOutput>,
+    private outputFn: MachineOutputFn<TOutput>,
   ) {
     this.currentState = {
       currentNode: initialNode,
@@ -22,7 +30,11 @@ export class GenericStateMachine<TOutput> implements StateMachine<TOutput> {
     if (this.isClosed()) {
       throw new Error('StateMachine is now closed and can not accept any more events');
     }
-    this.currentState = this.transitionFn(this.currentState, $event);
+    this.currentState = new MachineState<TOutput>(
+      this.transitionFn(this.currentState, $event),
+      this.outputFn(this.currentState, $event),
+    );
+
     return this.currentState;
   }
 

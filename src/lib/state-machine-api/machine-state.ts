@@ -1,6 +1,5 @@
 import { MachineNode } from './machine-node';
 
-export interface MachineState<TOutput> {
-  currentNode: MachineNode;
-  output?: TOutput;
+export class MachineState<TOutput> {
+  constructor(public currentNode: MachineNode, public output?: TOutput) {}
 }
