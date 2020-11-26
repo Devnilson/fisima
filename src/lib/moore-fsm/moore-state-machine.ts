@@ -33,7 +33,7 @@ export interface MooreNode<T> {
 }
 
 /**
- * Utility function to create a Moore FSM
+ * Utility function to create a Moore FSMm.
  * @param definition - The moore machine definition (nodes, transitions and outputs)
  * Usage:
  * createMooreStateMachine({

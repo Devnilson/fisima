@@ -13,5 +13,5 @@ export const createMealyTransitions: <T>(transitions: MealyTransitionMap<T>) => 
     return currentState.currentNode;
   }
 
-  return node.get($event)?.node!;
+  return node.get($event)!.node!;
 };
