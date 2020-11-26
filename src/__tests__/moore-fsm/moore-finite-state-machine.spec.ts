@@ -1,40 +1,33 @@
-import { MooreOutputMap } from '../../lib/moore-fsm/moore-output-map';
-import { MooreStateMachine } from '../../lib/moore-fsm';
-import { MooreTransitionMap } from '../../lib/moore-fsm/moore-transition-map';
+import { createMooreStateMachine, MooreNode } from '../../lib/moore-fsm';
 
 describe('moore-state-machine', () => {
-  const finalStates = new Set(['A', 'B']);
-  const transitions: MooreTransitionMap = new Map([
-    [
-      'A',
-      new Map([
+  const nodes: MooreNode<string>[] = [
+    {
+      name: 'A',
+      transitions: new Map([
         ['1', 'B'],
         ['0', 'A'],
       ]),
-    ],
-    [
-      'B',
-      new Map([
-        ['1', 'A'],
+      output: 'OutputA',
+      final: true,
+    },
+    {
+      name: 'B',
+      transitions: new Map([
         ['0', 'B'],
-        ['2', 'C'],
-      ]),
-    ],
-    [
-      'C',
-      new Map([
         ['1', 'A'],
-        ['0', 'B'],
       ]),
-    ],
-  ]);
-  const outputs: MooreOutputMap<string> = new Map([
-    ['A', 'OutputA'],
-    ['B', 'OutputB'],
-  ]);
+      output: 'OutputB',
+      final: true,
+    },
+  ];
 
   it('should move A->B->A', () => {
-    const machine = new MooreStateMachine('A', finalStates, transitions, outputs);
+    const machine = createMooreStateMachine({
+      initialState: 'A',
+      nodes,
+    });
+
     machine.handle('1');
     expect(machine.getCurrentState().currentNode).toBe('B');
     expect(machine.getCurrentState().output).toBe('OutputB');
@@ -44,37 +37,42 @@ describe('moore-state-machine', () => {
   });
 
   it('should move A->A', () => {
-    const machine = new MooreStateMachine('A', finalStates, transitions, outputs);
+    const machine = createMooreStateMachine({
+      initialState: 'A',
+      nodes,
+    });
     machine.handle('0');
     expect(machine.getCurrentState().currentNode).toBe('A');
     expect(machine.getCurrentState().output).toBe('OutputA');
   });
 
   it('should move B->B', () => {
-    const machine = new MooreStateMachine('B', finalStates, transitions, outputs);
+    const machine = createMooreStateMachine({
+      initialState: 'B',
+      nodes,
+    });
     machine.handle('0');
     expect(machine.getCurrentState().currentNode).toBe('B');
     expect(machine.getCurrentState().output).toBe('OutputB');
   });
 
   it('should not move when no transition', () => {
-    const machine = new MooreStateMachine('A', finalStates, transitions, outputs);
+    const machine = createMooreStateMachine({
+      initialState: 'A',
+      nodes,
+    });
     machine.handle('2');
     expect(machine.getCurrentState().currentNode).toBe('A');
     expect(machine.getCurrentState().output).toBe('OutputA');
   });
 
-  it('should not have output when not defined', () => {
-    const machine = new MooreStateMachine('B', finalStates, transitions, outputs);
-    machine.handle('2');
-    expect(machine.getCurrentState().currentNode).toBe('C');
-    expect(machine.getCurrentState().output).toBeUndefined();
-  });
-
   it('should not move when state not defined', () => {
-    const machine = new MooreStateMachine('D', finalStates, transitions, outputs);
+    const machine = createMooreStateMachine({
+      initialState: 'C',
+      nodes,
+    });
     machine.handle('1');
-    expect(machine.getCurrentState().currentNode).toBe('D');
+    expect(machine.getCurrentState().currentNode).toBe('C');
     expect(machine.getCurrentState().output).toBeUndefined();
   });
 });
