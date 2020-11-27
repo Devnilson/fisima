@@ -1,4 +1,4 @@
-import { MachineEvent, MachineNode } from '../state-machine-api';
+import { MachineEvent, MachineNode, MachineNodeId, MachineState } from '../state-machine-api';
 import { GenericStateMachine } from '../state-machine';
 import { MooreTransitionMap } from './moore-transition-map';
 import { createMooreOutput } from './moore-output.fn';
@@ -10,24 +10,24 @@ import { createMooreTransitions } from './moore-transition.fn';
  */
 class MooreStateMachine<T> extends GenericStateMachine<T> {
   constructor(
-    initialState: MachineNode,
-    finalNodes: Set<MachineNode>,
+    initialState: MachineState<T>,
+    nodes: MachineNode[],
     transitions: MooreTransitionMap,
     outputs: MooreOutputMap<T>,
   ) {
-    super(initialState, finalNodes, createMooreTransitions(transitions), createMooreOutput<T>(outputs));
+    super(initialState, nodes, createMooreTransitions(transitions), createMooreOutput<T>(outputs));
   }
 }
 
 // Utility for easy-building
 export interface MooreMachineDefinition<T> {
-  initialState: MachineNode;
+  initialNode: MachineNodeId;
   nodes: MooreNode<T>[];
 }
 
 export interface MooreNode<T> {
-  name: MachineNode;
-  transitions: Map<MachineEvent, MachineNode>;
+  id: MachineNodeId;
+  transitions: Map<MachineEvent, MachineNodeId>;
   output: T;
   final: boolean;
 }
@@ -56,20 +56,25 @@ export interface MooreNode<T> {
  *
  */
 export function createMooreStateMachine<T>(definition: MooreMachineDefinition<T>): MooreStateMachine<T> {
+  // TODO: Validate definition:
+  // All nodes have defined transitions
+  // InitialState is one of the nodes (!!currentNode)
+  // All Transitions point to existing nodes
+
   function createTransitions(): MooreTransitionMap {
-    return new Map<MachineNode, Map<MachineEvent, MachineNode>>(
-      definition.nodes.map((node) => [node.name, node.transitions]),
+    return new Map<MachineNodeId, Map<MachineEvent, MachineNodeId>>(
+      definition.nodes.map((node) => [node.id, node.transitions]),
     );
   }
 
   function createOutputs(): MooreOutputMap<T> {
-    return new Map<MachineNode, T>(definition.nodes.map((node) => [node.name, node.output]));
+    return new Map<MachineNodeId, T>(definition.nodes.map((node) => [node.id, node.output]));
   }
 
-  return new MooreStateMachine<T>(
-    definition.initialState,
-    new Set<MachineNode>(definition.nodes.filter((n) => n.final).map((n) => n.name)),
-    createTransitions(),
-    createOutputs(),
-  );
+  const nodes = definition.nodes.map((node) => ({ id: node.id, final: node.final } as MachineNode));
+  const output = definition.nodes.find((node) => node.id === definition.initialNode)!.output;
+  const currentNode = nodes.find((n) => n.id === definition.initialNode)!;
+  const initialState: MachineState<T> = { currentNode, output };
+
+  return new MooreStateMachine<T>(initialState, nodes, createTransitions(), createOutputs());
 }

@@ -8,51 +8,28 @@ import {
 } from '../state-machine-api';
 
 export class GenericStateMachine<TOutput> implements StateMachine<TOutput> {
-  private currentState: MachineState<TOutput>;
-  private closed = false;
+  private _currentState: MachineState<TOutput>;
 
   constructor(
-    private initialNode: MachineNode,
-    private finalNodes: Set<MachineNode>,
+    private initialState: MachineState<TOutput>,
+    private nodes: MachineNode[],
     private transitionFn: MachineTransitionFn<TOutput>,
     private outputFn: MachineOutputFn<TOutput>,
   ) {
-    this.currentState = {
-      currentNode: initialNode,
-    };
+    this._currentState = Object.freeze(initialState);
   }
 
-  public getCurrentState(): MachineState<TOutput> {
-    return this.currentState;
+  public get currentState(): MachineState<TOutput> {
+    return this._currentState;
   }
 
-  public handle($event: MachineEvent): MachineState<TOutput> | never {
-    if (this.isClosed()) {
-      throw new Error('StateMachine is now closed and can not accept any more events');
+  public dispatch($event: MachineEvent): MachineState<TOutput> {
+    const nextNodeId = this.transitionFn(this.currentState, $event);
+    const nextNode = this.nodes.find((node) => node.id === nextNodeId);
+    if (nextNode) {
+      const output = this.outputFn(this.currentState, $event, nextNode);
+      this._currentState = { currentNode: nextNode, output } as MachineState<TOutput>;
     }
-    const nextNode = this.transitionFn(this.currentState, $event);
-    const output = this.outputFn(this.currentState, $event, nextNode);
-    this.currentState = new MachineState<TOutput>(nextNode, output);
-    return this.currentState;
-  }
-
-  public canClose(): boolean {
-    return !this.isClosed() && this.finalNodes.has(this.currentState.currentNode);
-  }
-
-  public isClosed(): boolean {
-    return this.closed;
-  }
-
-  public close(): MachineState<TOutput> | never {
-    if (!this.canClose()) {
-      throw new Error(
-        'StateMachine can not be closed in current state: ' +
-          this.currentState.currentNode +
-          ' as it is not a final state',
-      );
-    }
-    this.closed = true;
-    return this.getCurrentState();
+    return this._currentState;
   }
 }

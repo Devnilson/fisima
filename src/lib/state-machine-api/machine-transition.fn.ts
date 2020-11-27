@@ -1,3 +1,3 @@
-import { MachineEvent, MachineState, MachineNode } from '.';
+import { MachineEvent, MachineState, MachineNodeId } from '.';
 
-export type MachineTransitionFn<TOutput> = (currentState: MachineState<TOutput>, $event: MachineEvent) => MachineNode;
+export type MachineTransitionFn<TOutput> = (currentState: MachineState<TOutput>, $event: MachineEvent) => MachineNodeId;

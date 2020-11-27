@@ -1,17 +1,9 @@
 import { MachineEvent, MachineOutputFn, MachineState } from '../state-machine-api';
-import { MealyTransitionMap } from './mealy-transition-map';
+import { MealyOutputMap } from './mealy-output-map';
 
-export const createMealyOutput: <T>(transitions: MealyTransitionMap<T>) => MachineOutputFn<T> = <T>(
-  transitions: MealyTransitionMap<T>,
-) => (currentState: MachineState<T>, $event: MachineEvent): T => {
-  if (!transitions.has(currentState.currentNode)) {
-    return Object.create(null);
-  }
-
-  const node = transitions.get(currentState.currentNode)!;
-  if (!node.has($event)) {
-    return Object.create(null);
-  }
-
-  return node.get($event)!.output!;
+export const createMealyOutput: <T>(outputMap: MealyOutputMap<T>) => MachineOutputFn<T> = <T>(
+  outputMap: MealyOutputMap<T>,
+) => (currentState: MachineState<T>, $event: MachineEvent): T | undefined => {
+  const node = outputMap.get(currentState.currentNode.id);
+  return node?.get($event);
 };

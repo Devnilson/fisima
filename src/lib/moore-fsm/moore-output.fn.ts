@@ -4,9 +4,5 @@ import { MooreOutputMap } from './moore-output-map';
 export const createMooreOutput: <T>(outputs: MooreOutputMap<T>) => MachineOutputFn<T> = <T>(
   outputs: MooreOutputMap<T>,
 ) => (currentState: MachineState<T>, $event: MachineEvent, nextNode: MachineNode): T | undefined => {
-  if (!outputs.has(nextNode)) {
-    return undefined;
-  }
-
-  return outputs.get(nextNode)!;
+  return outputs.get(nextNode.id);
 };

@@ -1,3 +1,3 @@
-import { MachineNode } from '../state-machine-api';
+import { MachineNodeId } from '../state-machine-api';
 
-export type MooreOutputMap<T> = Map<MachineNode, T>;
+export type MooreOutputMap<T> = Map<MachineNodeId, T>;

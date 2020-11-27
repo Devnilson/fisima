@@ -1,46 +1,47 @@
-import { MealyStateMachine } from '../../lib';
-import { MealyTransitionMap, MealyTransition } from '../../lib/mealy-fsm/mealy-transition-map';
+import { createMealyStateMachine } from '../../lib';
 
 describe('mealy-state-machine with mealy-transition-fn', () => {
-  const initialState = 'A';
-  const finalStates = new Set(['A', 'B']);
-  const transitions: MealyTransitionMap<string> = new Map([
-    [
-      'A',
-      new Map([
-        ['1', new MealyTransition<string>('B', 'output1')],
-        ['0', new MealyTransition<string>('A', 'output2')],
-      ]),
+  const machine = createMealyStateMachine({
+    initialNode: 'A',
+    nodes: [
+      {
+        id: 'A',
+        transitions: new Map([
+          ['1', { node: 'B', output: 'output1' }],
+          ['0', { node: 'A', output: 'output2' }],
+        ]),
+        final: true,
+      },
+      {
+        id: 'B',
+        transitions: new Map([
+          ['1', { node: 'A', output: 'output3' }],
+          ['0', { node: 'B', output: 'output4' }],
+        ]),
+        final: true,
+      },
     ],
-    [
-      'B',
-      new Map([
-        ['1', new MealyTransition<string>('A', 'output3')],
-        ['0', new MealyTransition<string>('B', 'output4')],
-      ]),
-    ],
-  ]);
-  const machine = new MealyStateMachine(initialState, finalStates, transitions);
+  });
 
   it('should move A->B->A', () => {
-    machine.handle('1');
-    expect(machine.getCurrentState().currentNode).toBe('B');
-    expect(machine.getCurrentState().output).toBe('output1');
-    machine.handle('1');
-    expect(machine.getCurrentState().currentNode).toBe('A');
-    expect(machine.getCurrentState().output).toBe('output3');
+    machine.dispatch('1');
+    expect(machine.currentState.currentNode.id).toBe('B');
+    expect(machine.currentState.output).toBe('output1');
+    machine.dispatch('1');
+    expect(machine.currentState.currentNode.id).toBe('A');
+    expect(machine.currentState.output).toBe('output3');
   });
 
   it('should move A->A', () => {
-    machine.handle('0');
-    expect(machine.getCurrentState().currentNode).toBe('A');
-    expect(machine.getCurrentState().output).toBe('output2');
+    machine.dispatch('0');
+    expect(machine.currentState.currentNode.id).toBe('A');
+    expect(machine.currentState.output).toBe('output2');
   });
 
   it('should move B->B', () => {
-    machine.handle('1');
-    machine.handle('0');
-    expect(machine.getCurrentState().currentNode).toBe('B');
-    expect(machine.getCurrentState().output).toBe('output4');
+    machine.dispatch('1');
+    machine.dispatch('0');
+    expect(machine.currentState.currentNode.id).toBe('B');
+    expect(machine.currentState.output).toBe('output4');
   });
 });
