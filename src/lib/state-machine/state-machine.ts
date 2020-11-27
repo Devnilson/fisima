@@ -30,11 +30,9 @@ export class GenericStateMachine<TOutput> implements StateMachine<TOutput> {
     if (this.isClosed()) {
       throw new Error('StateMachine is now closed and can not accept any more events');
     }
-    this.currentState = new MachineState<TOutput>(
-      this.transitionFn(this.currentState, $event),
-      this.outputFn(this.currentState, $event),
-    );
-
+    const nextNode = this.transitionFn(this.currentState, $event);
+    const output = this.outputFn(this.currentState, $event, nextNode);
+    this.currentState = new MachineState<TOutput>(nextNode, output);
     return this.currentState;
   }
 

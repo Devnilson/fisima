@@ -21,7 +21,7 @@ describe('deterministic-state-machine', () => {
       (_state, _event) => 1,
     );
 
-    var transition = machine.handle('X');
+    const transition = machine.handle('X');
     expect(transition.currentNode).toBe('A');
     expect(transition.output).toBe(1);
     expect(machine.getCurrentState().currentNode).toBe('A');
@@ -36,7 +36,7 @@ describe('deterministic-state-machine', () => {
       (_state, _event) => 1,
     );
 
-    var transition = machine.handle('X');
+    const transition = machine.handle('X');
     expect(transition.currentNode).toBe('B');
     expect(transition.output).toBe(1);
     expect(machine.getCurrentState().currentNode).toBe('B');

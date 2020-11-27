@@ -13,5 +13,5 @@ export const createMealyOutput: <T>(transitions: MealyTransitionMap<T>) => Machi
     return Object.create(null);
   }
 
-  return node.get($event)?.output!;
+  return node.get($event)!.output!;
 };

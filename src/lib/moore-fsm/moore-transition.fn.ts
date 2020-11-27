@@ -1,8 +1,8 @@
 import { MachineEvent, MachineTransitionFn, MachineState, MachineNode } from '../state-machine-api';
-import { MealyTransitionMap } from './mealy-transition-map';
+import { MooreTransitionMap } from './moore-transition-map';
 
-export const createMealyTransitions: <T>(transitions: MealyTransitionMap<T>) => MachineTransitionFn<T> = <T>(
-  transitions: MealyTransitionMap<T>,
+export const createMooreTransitions: <T>(transitions: MooreTransitionMap) => MachineTransitionFn<T> = <T>(
+  transitions: MooreTransitionMap,
 ) => (currentState: MachineState<T>, $event: MachineEvent): MachineNode => {
   if (!transitions.has(currentState.currentNode)) {
     return currentState.currentNode;
@@ -13,5 +13,5 @@ export const createMealyTransitions: <T>(transitions: MealyTransitionMap<T>) => 
     return currentState.currentNode;
   }
 
-  return node.get($event)!.node!;
+  return node.get($event)!;
 };
