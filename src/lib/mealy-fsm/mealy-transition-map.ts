@@ -1,7 +1,3 @@
-import { MachineNode, MachineEvent } from '../state-machine-api';
+import { MachineNodeId, MachineEvent } from '../state-machine-api';
 
-export class MealyTransition<T> {
-  constructor(public node: MachineNode, public output: T) {}
-}
-
-export type MealyTransitionMap<T> = Map<MachineNode, Map<MachineEvent, MealyTransition<T>>>;
+export type MealyTransitionMap = Map<MachineNodeId, Map<MachineEvent, MachineNodeId>>;

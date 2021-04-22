@@ -1,4 +1,4 @@
-import { MachineEvent, MachineNode, MachineState } from '.';
+import { MachineEvent, MachineNode, MachineNodeId, MachineState } from '.';
 
 export type MachineOutputFn<TOutput> = (
   currentState: MachineState<TOutput>,
